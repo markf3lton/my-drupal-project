@@ -1,0 +1,48 @@
+---
+# Reference: https://docs.tugboatqa.com/starter-configs/tutorials/drupal-10/index.html
+services:
+  database:
+    # Tugboat's database container
+    image: tugboatqa/mariadb:10.11
+
+  webserver:
+    # Tugboat's webserver container
+    image: tugboatqa/php:8.3-apache
+    default: true
+    depends: database
+    commands:
+      init:
+        - a2enmod rewrite headers
+        # Disable SSL for MySQL client connections to Tugboat's database container
+        - |
+          cat > /etc/my.cnf <<'EOF'
+          [client]
+          skip-ssl = true
+          EOF
+        - echo "TUGBOAT_ROOT is ${TUGBOAT_ROOT}"
+        - echo "Display the contents of .tugboat"
+        - ls -al "${TUGBOAT_ROOT}/.tugboat"
+        - echo "DOCROOT is ${DOCROOT}"
+        # Create a symlink from /var/www/html → /var/lib/tugboat/web
+        - ln -snf "${TUGBOAT_ROOT}/web" "${DOCROOT}"
+        # Only import database during init of Base Preview, not with every update/refresh
+        # Specify the Tugboat database container with -h database, disable SSL with --ssl=false
+        # Reference: https://docs.tugboatqa.com/troubleshooting/mysql-ssl-disabled/index.html
+        - zcat "${TUGBOAT_ROOT}/.tugboat/database.sql.gz" | mysql -h database -u tugboat -ptugboat --ssl=false tugboat
+        # Wait for database to be ready before proceeding
+        - |
+          echo "Waiting for database..."
+          until mysql -h database -u tugboat -ptugboat -e "SELECT 1;" &>/dev/null; do
+            sleep 2
+          done
+          echo "Database is ready!"
+        - sleep 5
+
+      build:
+        - echo "TUGBOAT_ROOT is ${TUGBOAT_ROOT}"
+        - ls -al "${TUGBOAT_ROOT}/.tugboat"
+        - echo "DOCROOT is ${DOCROOT}"
+        - composer install --no-interaction --prefer-dist --optimize-autoloader
+        - vendor/bin/drush updatedb -y
+        # Keep calm and clear caches
+        - vendor/bin/drush cache:rebuild
