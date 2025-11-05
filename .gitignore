@@ -1,3 +1,5 @@
+# example.gitignore from https://git.drupalcode.org/project/drupal/-/blob/11.x/example.gitignore
+
 # This file contains default .gitignore rules. To use it, copy it to .gitignore,
 # and it will cause files like your settings.php and user-uploaded files to be
 # excluded from Git version control. This is a common strategy to avoid
@@ -40,3 +42,73 @@ sites/simpletest
 
 # Ignore multi-site test environment.
 # simpletest
+
+
+# ==========================================================
+# Core Drupal
+# ==========================================================
+/core
+/vendor
+/web/core
+/web/modules/contrib
+/web/themes/contrib
+/web/profiles/contrib
+/web/sites/default/files
+/web/sites/default/private
+
+# ==========================================================
+# Composer / PHP
+# ==========================================================
+composer.lock
+/vendor/
+/.drush/
+/.drupalci.yml
+/.phpunit.result.cache
+
+# ==========================================================
+# Tugboat / Local environment
+# ==========================================================
+# .tugboat/
+.env
+*.local.yml
+*.local.php
+
+# ==========================================================
+# IDE / OS junk
+# ==========================================================
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ==========================================================
+# Node / Frontend
+# ==========================================================
+node_modules/
+npm-debug.log
+yarn-error.log
+/.sass-cache/
+/web/themes/custom/*/dist/
+/web/themes/custom/*/node_modules/
+/web/themes/custom/*/package-lock.json
+/web/themes/custom/*/yarn.lock
+
+# ==========================================================
+# Drush / Config / Misc
+# ==========================================================
+drush/contrib/
+drush/site-aliases/
+sites/simpletest/
+config/sync/*.bak
+config/sync/*.orig
+config/sync/*.tmp
+
+# ==========================================================
+# Temporary and cache files
+# ==========================================================
+/tmp/
+/cache/
+/logs/
+/backups/
