@@ -44,5 +44,6 @@ services:
         - echo "DOCROOT is ${DOCROOT}"
         - composer install --no-interaction --prefer-dist --optimize-autoloader
         - vendor/bin/drush updatedb -y
+        - vendor/bin/drush config:import
         # Keep calm and clear caches
         - vendor/bin/drush cache:rebuild
