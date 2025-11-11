@@ -11,8 +11,7 @@ services:
     default: true
     depends: database
     aliases:
-      - type: domain
-        domain: preview.felton.one
+      - preview.felton.one
     commands:
       init:
         - a2enmod rewrite headers
