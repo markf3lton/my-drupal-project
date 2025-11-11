@@ -10,10 +10,8 @@ services:
     image: tugboatqa/php:8.3-apache
     default: true
     depends: database
-    alias_type:
-      - domain
     aliases:
-      - preview.felton.one
+      - preview
     commands:
       init:
         - a2enmod rewrite headers
