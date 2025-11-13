@@ -2,7 +2,7 @@ _core:
   default_config_hash: f8DLWtvnkVxxl2CDg7wHgjKXXgBrjCp67LAnKXd-7LU
 cache:
   http:
-    s_maxage: 86400
+    s_maxage: 900
     404_max_age: 0
     302_max_age: 0
     301_max_age: 0
