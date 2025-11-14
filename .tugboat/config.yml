@@ -10,6 +10,8 @@ services:
     image: tugboatqa/php:8.3-apache
     default: true
     depends: database
+    aliases:
+      - preview
     commands:
       init:
         - a2enmod rewrite headers
